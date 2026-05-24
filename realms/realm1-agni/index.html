@@ -13,36 +13,43 @@ body {
   background:black;
   overflow:hidden;
   font-family:Arial;
-  color:white;
 }
 
-/* Player */
+/* PLAYER (HAND STYLE) */
 #player {
-  width:40px;
-  height:40px;
-  background:cyan;
+  width:50px;
+  height:50px;
+  background:deepskyblue;
   position:absolute;
-  bottom:50px;
+  bottom:60px;
   left:50%;
   transform:translateX(-50%);
   border-radius:50%;
-  box-shadow:0 0 20px cyan;
+
+  box-shadow:0 0 25px deepskyblue;
+
+  /* hand feel animation */
+  animation: handMove 0.6s infinite alternate;
 }
 
-/* Fire */
+@keyframes handMove {
+  0% { transform:translateX(-50%) scale(1); }
+  100% { transform:translateX(-50%) scale(1.1); }
+}
+
+/* FIRE IMAGE STYLE */
 .fire {
-  width:40px;
-  height:40px;
-  background:orange;
+  width:50px;
+  height:50px;
   position:absolute;
-  top:0;
-  border-radius:10px;
-  box-shadow:0 0 20px red;
-  animation: fall 2s linear infinite;
+  top:-60px;
+  background-image:url("https://i.imgur.com/3M9Z5vG.png"); /* fire image */
+  background-size:cover;
+  animation: fall 2s linear;
 }
 
 @keyframes fall {
-  0% { top:-50px; }
+  0% { top:-60px; }
   100% { top:100vh; }
 }
 
@@ -84,22 +91,26 @@ let gameOverText = document.getElementById("gameOver");
 let energy = 0;
 let gameOver = false;
 
-/* Move Player */
+/* SMOOTH MOVE */
+let playerX = window.innerWidth / 2;
+
 document.addEventListener("keydown", (e) => {
 
-  let left = player.offsetLeft;
+  if(gameOver) return;
 
   if(e.key === "ArrowLeft") {
-    player.style.left = left - 20 + "px";
+    playerX -= 30;
   }
 
   if(e.key === "ArrowRight") {
-    player.style.left = left + 20 + "px";
+    playerX += 30;
   }
+
+  player.style.left = playerX + "px";
 
 });
 
-/* Create Fire */
+/* FIRE CREATION */
 function createFire() {
 
   if(gameOver) return;
@@ -111,8 +122,8 @@ function createFire() {
 
   document.body.appendChild(fire);
 
-  /* Collision check */
-  setInterval(() => {
+  /* collision */
+  let check = setInterval(() => {
 
     let p = player.getBoundingClientRect();
     let f = fire.getBoundingClientRect();
@@ -129,8 +140,8 @@ function createFire() {
 
   }, 50);
 
-  /* Remove fire after time */
   setTimeout(() => {
+    clearInterval(check);
     fire.remove();
 
     if(!gameOver) {
@@ -142,7 +153,7 @@ function createFire() {
 
 }
 
-setInterval(createFire, 800);
+setInterval(createFire, 900);
 
 </script>
 
