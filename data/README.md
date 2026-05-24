@@ -1,1 +1,1 @@
-
+Game data folder
