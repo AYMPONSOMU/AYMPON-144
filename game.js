@@ -2,6 +2,7 @@ const enterBtn = document.getElementById("enterBtn");
 
 enterBtn.addEventListener("click", () => {
 
-  alert("Welcome to AYMPON 144");
+  // go to Realm 1
+  window.location.href = "realms/realm1-agni/index.html";
 
 });
