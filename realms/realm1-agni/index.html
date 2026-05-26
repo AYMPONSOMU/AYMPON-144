@@ -4,76 +4,172 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>AGNI TRIAL</title>
+<title>AYMPON 144 — AGNI AWAKENING</title>
 
 <style>
 
-body {
+body{
   margin:0;
-  background:black;
   overflow:hidden;
-  font-family:Arial;
+  background:black;
+  font-family:Arial, sans-serif;
 }
 
-/* PLAYER (HAND STYLE) */
-#player {
-  width:50px;
-  height:50px;
-  background:deepskyblue;
+/* FIRE BACKGROUND */
+
+body::before{
+  content:"";
   position:absolute;
-  bottom:60px;
+  width:100%;
+  height:100%;
+
+  background:
+  radial-gradient(circle at center,
+  rgba(255,120,0,0.4),
+  black 70%);
+
+  animation:pulse 3s infinite;
+}
+
+@keyframes pulse{
+  0%{opacity:0.7;}
+  50%{opacity:1;}
+  100%{opacity:0.7;}
+}
+
+/* TITLE */
+
+#title{
+  position:absolute;
+  top:20px;
+  width:100%;
+  text-align:center;
+  color:orange;
+  font-size:32px;
+  text-shadow:0 0 20px red;
+}
+
+/* RUSTY */
+
+#rusty{
+  position:absolute;
+  top:80px;
   left:50%;
   transform:translateX(-50%);
+
+  width:180px;
+  height:260px;
+
+  background:
+  linear-gradient(to bottom,
+  purple,
+  black);
+
+  border-radius:20px;
+
+  box-shadow:
+  0 0 40px purple,
+  0 0 80px red;
+
+  animation:float 3s infinite ease-in-out;
+}
+
+@keyframes float{
+  0%{transform:translateX(-50%) translateY(0);}
+  50%{transform:translateX(-50%) translateY(-10px);}
+  100%{transform:translateX(-50%) translateY(0);}
+}
+
+/* EYES */
+
+.eye{
+  position:absolute;
+  top:70px;
+  width:18px;
+  height:18px;
+  background:red;
   border-radius:50%;
 
-  box-shadow:0 0 25px deepskyblue;
-
-  /* hand feel animation */
-  animation: handMove 0.6s infinite alternate;
+  box-shadow:0 0 15px red;
 }
 
-@keyframes handMove {
-  0% { transform:translateX(-50%) scale(1); }
-  100% { transform:translateX(-50%) scale(1.1); }
-}
+#eye1{ left:55px; }
+#eye2{ right:55px; }
 
-/* FIRE IMAGE STYLE */
-.fire {
-  width:50px;
-  height:50px;
+/* MAGIC FIRE */
+
+.fire{
   position:absolute;
-  top:-60px;
+  width:25px;
+  height:25px;
+
   background:
-radial-gradient(circle, yellow 0%, orange 40%, red 70%);
+  radial-gradient(circle,
+  yellow,
+  orange,
+  red);
 
-box-shadow:
-0 0 20px orange,
-0 0 40px red;
-  animation: fall 2s linear;
+  border-radius:50%;
+
+  box-shadow:
+  0 0 20px orange,
+  0 0 40px red;
+
+  animation:fall 3s linear infinite;
 }
 
-@keyframes fall {
-  0% { top:-60px; }
-  100% { top:100vh; }
+@keyframes fall{
+  0%{
+    top:-50px;
+  }
+  100%{
+    top:100vh;
+  }
 }
 
-/* UI */
-#ui {
-  position:fixed;
-  top:10px;
-  left:10px;
-  color:orange;
-  font-size:18px;
-}
+/* MYSTIC HAND */
 
-#gameOver {
-  position:fixed;
-  top:50%;
+#hand{
+  position:absolute;
+
+  bottom:80px;
   left:50%;
-  transform:translate(-50%,-50%);
-  font-size:40px;
-  color:red;
-  display:none;
+
+  transform:translateX(-50%);
+
+  width:120px;
+  height:120px;
+
+  border-radius:50%;
+
+  background:
+  radial-gradient(circle,
+  cyan,
+  blue);
+
+  box-shadow:
+  0 0 30px cyan,
+  0 0 60px blue;
+
+  animation:energy 2s infinite;
+}
+
+@keyframes energy{
+  0%{transform:translateX(-50%) scale(1);}
+  50%{transform:translateX(-50%) scale(1.08);}
+  100%{transform:translateX(-50%) scale(1);}
+}
+
+/* TEXT */
+
+#message{
+  position:absolute;
+  bottom:20px;
+  width:100%;
+  text-align:center;
+
+  color:white;
+  font-size:20px;
 }
 
 </style>
@@ -81,89 +177,64 @@ box-shadow:
 
 <body>
 
-<div id="ui">Energy: 0</div>
-<div id="gameOver">YOU BECAME ASH ☠️</div>
+<div id="title">
+  AYMPON 144 — AGNI AWAKENING
+</div>
 
-<div id="player"></div>
+<!-- Rusty -->
+<div id="rusty">
+
+  <div class="eye" id="eye1"></div>
+  <div class="eye" id="eye2"></div>
+
+</div>
+
+<!-- Mystic Hand -->
+<div id="hand"></div>
+
+<div id="message">
+  Rusty has awakened the Agni Realm 🔥
+</div>
 
 <script>
 
-let player = document.getElementById("player");
-let ui = document.getElementById("ui");
-let gameOverText = document.getElementById("gameOver");
-
-let energy = 0;
-let gameOver = false;
-
-/* SMOOTH MOVE */
-let playerX = window.innerWidth / 2;
-
-/* MOBILE TOUCH MOVE */
-
-let touching = false;
-
-document.addEventListener("touchstart", () => {
-  touching = true;
-});
-
-document.addEventListener("touchend", () => {
-  touching = false;
-});
-
-document.addEventListener("touchmove", (e) => {
-
-  if(gameOver) return;
-
-  let touchX = e.touches[0].clientX;
-
-  player.style.left = touchX + "px";
-
-});
-
 /* FIRE CREATION */
-function createFire() {
 
-  if(gameOver) return;
+function createFire(){
 
   let fire = document.createElement("div");
+
   fire.classList.add("fire");
 
-  fire.style.left = Math.random() * window.innerWidth + "px";
+  fire.style.left =
+  Math.random() * window.innerWidth + "px";
 
   document.body.appendChild(fire);
 
-  /* collision */
-  let check = setInterval(() => {
-
-    let p = player.getBoundingClientRect();
-    let f = fire.getBoundingClientRect();
-
-    if (
-      p.left < f.left + 40 &&
-      p.left + 40 > f.left &&
-      p.top < f.top + 40 &&
-      p.bottom > f.top
-    ) {
-      gameOver = true;
-      gameOverText.style.display = "block";
-    }
-
-  }, 50);
-
-  setTimeout(() => {
-    clearInterval(check);
+  setTimeout(()=>{
     fire.remove();
-
-    if(!gameOver) {
-      energy += 50;
-      ui.innerHTML = "Energy: " + energy;
-    }
-
-  }, 2000);
+  },3000);
 
 }
 
-setInterval(createFire, 900);
+setInterval(createFire,500);
+
+/* MOBILE HAND MOVE */
+
+let hand =
+document.getElementById("hand");
+
+document.addEventListener(
+"touchmove",
+(e)=>{
+
+  let x =
+  e.touches[0].clientX;
+
+  hand.style.left =
+  x + "px";
+
+});
 
 </script>
 
