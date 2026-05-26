@@ -178,6 +178,7 @@ body{
   0 0 80px red;
 
   animation:floatRusty 4s ease-in-out infinite;
+transition: all 0.3s ease;
 }
 
 @keyframes floatRusty{
@@ -282,7 +283,92 @@ body{
   text-shadow:
   0 0 10px orange;
 }
+/* FIREBALL */
 
+#fireball{
+
+  position:absolute;
+
+  top:260px;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  width:70px;
+  height:70px;
+
+  border-radius:50%;
+
+  background:
+  radial-gradient(circle,
+  yellow,
+  orange,
+  red);
+
+  box-shadow:
+  0 0 20px orange,
+  0 0 50px red;
+
+  animation:
+  spinFire 2s linear infinite,
+  firePulse 1.5s infinite;
+}
+
+@keyframes spinFire{
+
+  0%{
+    transform:
+    translateX(-50%)
+    rotate(0deg);
+  }
+
+  100%{
+    transform:
+    translateX(-50%)
+    rotate(360deg);
+  }
+
+}
+
+@keyframes firePulse{
+
+  0%{
+    scale:1;
+  }
+
+  50%{
+    scale:1.2;
+  }
+
+  100%{
+    scale:1;
+  }
+
+}
+
+/* EYE GLOW */
+
+.eye{
+
+  animation:
+  eyePulse 1s infinite;
+}
+
+@keyframes eyePulse{
+
+  0%{
+    opacity:0.5;
+  }
+
+  50%{
+    opacity:1;
+  }
+
+  100%{
+    opacity:0.5;
+  }
+
+  }
 </style>
 </head>
 
@@ -302,7 +388,7 @@ AYMPON 144
 <div id="rustyAura"></div>
 
 <div id="rusty">
-
+<div id="fireball"></div>
   <div class="eye" id="eye1"></div>
   <div class="eye" id="eye2"></div>
 
