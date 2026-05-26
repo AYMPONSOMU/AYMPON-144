@@ -43,8 +43,12 @@ body {
   height:50px;
   position:absolute;
   top:-60px;
-  background-image:url("https://i.imgur.com/3M9Z5vG.png"); /* fire image */
-  background-size:cover;
+  background:
+radial-gradient(circle, yellow 0%, orange 40%, red 70%);
+
+box-shadow:
+0 0 20px orange,
+0 0 40px red;
   animation: fall 2s linear;
 }
 
