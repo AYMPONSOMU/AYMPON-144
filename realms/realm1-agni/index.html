@@ -98,19 +98,25 @@ let gameOver = false;
 /* SMOOTH MOVE */
 let playerX = window.innerWidth / 2;
 
-document.addEventListener("keydown", (e) => {
+/* MOBILE TOUCH MOVE */
+
+let touching = false;
+
+document.addEventListener("touchstart", () => {
+  touching = true;
+});
+
+document.addEventListener("touchend", () => {
+  touching = false;
+});
+
+document.addEventListener("touchmove", (e) => {
 
   if(gameOver) return;
 
-  if(e.key === "ArrowLeft") {
-    playerX -= 30;
-  }
+  let touchX = e.touches[0].clientX;
 
-  if(e.key === "ArrowRight") {
-    playerX += 30;
-  }
-
-  player.style.left = playerX + "px";
+  player.style.left = touchX + "px";
 
 });
 
